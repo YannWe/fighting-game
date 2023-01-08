@@ -12,6 +12,19 @@ class Sprite {
         this.velocity = velocity
         this.width = 50
         this.height = 150
+    }
+    draw() {
+    }
+    update() {
+        this.draw()
+    }
+}
+class Fighter {
+    constructor({ position, velocity, color = 'red', offset }) {
+        this.position = position
+        this.velocity = velocity
+        this.width = 50
+        this.height = 150
         this.lastKey
         this.attackBox = {
             position: {
