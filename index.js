@@ -37,6 +37,37 @@ const player = new Fighter({
     offset: {
         x: 0,
         y: 0
+    },
+    imageSrc: './assets/samuraiMack/Idle.png',
+    framesMax: 8,
+    scale: 2.5,
+    offset: {
+        x: 215,
+        y: 157
+    },
+    sprites: {
+        idle: {
+            imageSrc: './assets/samuraiMack/Idle.png',
+            framesMax: 8,
+        },
+        
+        run: {
+            imageSrc: './assets/samuraiMack/Run.png',
+            framesMax: 8,
+        },
+        jump: {
+            imageSrc: './assets/samuraiMack/Jump.png',
+            framesMax: 2,
+        },
+        fall: {
+            imageSrc: './assets/samuraiMack/Fall.png',
+            framesMax: 2
+        },
+        attack1: {
+            imageSrc: './assets/samuraiMack/Fall.png',
+            framesMax: 6
+        },
+        
     }
 })
 
@@ -88,17 +119,29 @@ function animate() {
     background.update()
     shop.update()
     player.update()
-    enemy.update()
+/*     enemy.update() */
     // console.log('go')
 
     player.velocity.x = 0
     enemy.velocity.x = 0
 
     //player movement
+
     if (keys.a.pressed && player.lastKey === 'a') {
         player.velocity.x = -5
+        player.switchSprite('run')
     } else if (keys.d.pressed && player.lastKey === 'd') {
         player.velocity.x = 5
+        player.switchSprite('run')
+    } else {
+        player.switchSprite('idle')
+    }
+    // jumping
+
+    if (player.velocity.y < 0) {
+        player.switchSprite('jump')
+    } else if (player.velocity.y > 0) {
+        player.switchSprite('fall')
     }
     //enemy movement
     if (keys.ArrowLeft.pressed && enemy.lastKey === 'ArrowLeft') {
