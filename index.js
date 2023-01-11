@@ -50,7 +50,6 @@ const player = new Fighter({
             imageSrc: './assets/samuraiMack/Idle.png',
             framesMax: 8,
         },
-        
         run: {
             imageSrc: './assets/samuraiMack/Run.png',
             framesMax: 8,
@@ -67,7 +66,18 @@ const player = new Fighter({
             imageSrc: './assets/samuraiMack/Attack1.png',
             framesMax: 6
         },
-        
+        takeHit: {
+            imageSrc: './assets/samuraiMack/Take Hit - white silhouette.png',
+            framesMax: 4
+        },
+    },
+    attackBox: {
+        offset: {
+            x: 100,
+            y: 50,
+        },
+        width: 160,
+        height: 50,
     }
 })
 
@@ -98,7 +108,7 @@ const enemy = new Fighter({
             imageSrc: './assets/kenji/Idle.png',
             framesMax: 4,
         },
-        
+
         run: {
             imageSrc: './assets/kenji/Run.png',
             framesMax: 8,
@@ -115,7 +125,18 @@ const enemy = new Fighter({
             imageSrc: './assets/kenji/Attack1.png',
             framesMax: 4
         },
-        
+        takeHit: {
+            imageSrc: './assets/kenji/Take hit.png',
+            framesMax: 3
+        }
+    },
+    attackBox: {
+        offset: {
+            x: -171,
+            y: 50,
+        },
+        width: 171,
+        height: 50,
     }
 })
 
@@ -167,8 +188,8 @@ function animate() {
     } else {
         player.switchSprite('idle')
     }
-    // jumping
 
+    // jumping
     if (player.velocity.y < 0) {
         player.switchSprite('jump')
     } else if (player.velocity.y > 0) {
@@ -185,35 +206,44 @@ function animate() {
         enemy.switchSprite('idle')
     }
 
-        // jumping
+    // jumping
 
-        if (enemy.velocity.y < 0) {
-            enemy.switchSprite('jump')
-        } else if (enemy.velocity.y > 0) {
+    if (enemy.velocity.y < 0) {
+        enemy.switchSprite('jump')
+    } else if (enemy.velocity.y > 0) {
         enemy.switchSprite('fall')
-        }
+    }
 
-    // detect for collision
+    // detect for collision & enemy gets hit
     if (rectangularCollision({
         rectangle1: player,
         rectangle2: enemy
-    }) && player.isAttacking
-    ) {
+    }) && player.isAttacking && player.framesCurrent  === 4) {
+        enemy.takeHit()
         player.isAttacking = false
-        enemy.health -= 20
+
         document.querySelector('#enemyHealth').style.width = enemy.health + "%"
     }
 
+    // if player misses
+    if (player.isAttacking && player.framesCurrent === 4) {
+        player.isAttacking = false
+    }
+    // this is where our player gets hit
     if (rectangularCollision({
         rectangle1: player,
         rectangle2: enemy
-    }) && enemy.isAttacking
+    }) && enemy.isAttacking && enemy.framesCurrent === 2
     ) {
+        player.takeHit()
         enemy.isAttacking = false
-        player.health -= 20
+
         document.querySelector('#playerHealth').style.width = player.health + "%"
-        console.log('enemy attack successful')
     }
+        // if enemy misses
+        if (enemy.isAttacking && enemy.framesCurrent === 2) {
+            enemy.isAttacking = false
+        }
 
     // end game based on health
     if (enemy.health <= 0 || player.health <= 0) {
