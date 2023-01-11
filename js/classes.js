@@ -9,7 +9,7 @@ class Sprite {
         this.framesMax = framesMax
         this.framesCurrent = 0
         this.framesElapsed = 0
-        this.framesHold = 8
+        this.framesHold = 5
         this.offset = offset
     }
     draw() {
@@ -58,13 +58,12 @@ class Fighter extends Sprite {
         this.health = 100
         this.framesCurrent = 0
         this.framesElapsed = 0
-        this.framesHold = 8
+        this.framesHold = 5
         this.sprites = sprites
 
         for (const sprite in this.sprites) {
             sprites[sprite].image = new Image()
             sprites[sprite].image.src = sprites[sprite].imageSrc
-
         }
     }
     // draw() {
@@ -86,7 +85,7 @@ class Fighter extends Sprite {
         this.animateFrames()
 
         this.attackBox.position.x = this.position.x + this.attackBox.offset.x
-        this.attackBox.position.y = this.position.y
+        this.attackBox.position.y = this.position.y + this.attackBox.offset.y
 
         this.position.x += this.velocity.x
         this.position.y += this.velocity.y
